@@ -34,11 +34,11 @@ ipl: ; initial program loader
     ; CHS方式でセクタを読み出す No5523
     mov ah, 0x02 ; 固定
     mov al, 1 ; 読み込みセクタ数
-    mov cx, 0x0002 ; CL->シリンダ番号（上位２ビット）CH->シリンダ番号（下位8ビット）No7319がわかりやすい 0~1023なので10bit使われる
+    mov cx, 0x0002 ; CL->シリンダ番号（上位２ビット）CH->シリンダ番号（下位8ビット）No7319がわかりやすい 0~1023なので10bit使われる。CLの下位6bitはセクタ番号
     mov dh, 0x00 ; ヘッド番号 8ビット使う
     mov dl, [BOOT.DRIVE] ; ドライブ番号。起動時にBIOSから渡される
-    mov bx, 0x7C00 + 512 ; 読み込み先の決め打ち
-    int 0x13
+    mov bx, 0x7C00 + 512 ; 読み込み先の決め打ち、stage2の展開先
+    int 0x13 ; No5523
 
 .10Q: jnc .10E ; 出力として成功はCF=0, 失敗はCF=1なのでそこで条件分岐
 .10T: cdecl puts, .e0
